@@ -3,6 +3,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const db = require("./database");
 const jwt = require("jsonwebtoken");
+const { normalizeSearchQuery } = require("./search_utils");
 
 const app = express();
 const PORT = 3000;
@@ -139,7 +140,7 @@ app.put("/api/users/me", authenticateToken, (req, res) => {
 // ==========================================
 
 app.get("/api/products", (req, res) => {
-  const searchQuery = req.query.search;
+  const searchQuery = normalizeSearchQuery(req.query.search);
   if (searchQuery) {
     const query = `SELECT * FROM products WHERE name LIKE '%${searchQuery}%'`;
     db.all(query, [], (err, rows) => {

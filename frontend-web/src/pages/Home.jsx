@@ -12,8 +12,9 @@ export default function Home() {
   const fetchProducts = async (query = "") => {
     try {
       setErrorHtml("");
+      const normalizedQuery = query.trim();
       const res = await axios.get(
-        `http://localhost:3000/api/products?search=${query}`,
+        `http://localhost:3000/api/products?search=${encodeURIComponent(normalizedQuery)}`,
       );
       if (typeof res.data === "string" && res.data.includes("<h1>")) {
         setErrorHtml(res.data);
@@ -34,7 +35,7 @@ export default function Home() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    fetchProducts(search);
+    fetchProducts(search.trim());
   };
 
   return (

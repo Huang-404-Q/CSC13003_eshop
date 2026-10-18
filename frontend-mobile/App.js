@@ -85,7 +85,10 @@ export default function App() {
     setLoadingProducts(true);
     try {
       setErrorHtml("");
-      const response = await fetch(`${API_URL}/products?search=${query}`);
+      const normalizedQuery = query.trim();
+      const response = await fetch(
+        `${API_URL}/products?search=${encodeURIComponent(normalizedQuery)}`,
+      );
       const text = await response.text();
       let data = text;
       try {
@@ -107,7 +110,7 @@ export default function App() {
   };
 
   const handleSearch = () => {
-    fetchProducts(search);
+    fetchProducts(search.trim());
   };
 
   const openProductDetail = async (id) => {
